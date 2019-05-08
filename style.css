@@ -1,0 +1,27 @@
+*{
+    box-sizing:border-box;
+}
+body{
+    padding: 1rem;
+    position: relative;
+}
+
+ul {
+    padding: 0;
+    list-style: none;
+}
+
+.hide{
+    display: none;
+}
+
+#popup{
+    position: absolute;
+    bottom:15%;
+    right:10%;
+    z-index:5;
+    background-color: rgba(46, 204, 113, 1);
+    color: rgb(255,255,255);
+    padding: 3rem;
+    font-size: 2rem;
+}
