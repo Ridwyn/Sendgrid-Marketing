@@ -10,8 +10,9 @@ let listName=document.getElementById('listName');
 let listsOfRecipients=document.getElementById('listsOfRecipients')
 let submitFormBtn=document.getElementById('submitForm')
 let editFormBtn=document.getElementById('editForm')
-let recipientForm=document.getElementById('recipientForm')
+let recipientForm=document.getElementById('recipientEditForm')
 let dropdownList=document.getElementById('dropdownList');
+let totalContacts=document.getElementById('totalContacts')
 let newFetch=false;
 
 
@@ -31,6 +32,24 @@ async function makeRequest(method,url,headers,body) {
     
 }
 
+function deleteRecipient(recipient_id){
+    let header={"Content-Type": "application/json",id:""+recipient_id+""}
+    // console.log(header)
+    makeRequest('delete','https://young-bastion-69451.herokuapp.com/delete-recipient',header)
+    .then(response=>{
+        console.log(response)
+        if(response.status===200){
+            popup.innerHTML=`Deleted`
+            popup.classList.remove('hide')
+            load()
+            setTimeout(()=>{popup.classList.add('hide'); },1000)
+            setTimeout(()=>{
+            load()   
+            },2500)
+        }
+    })
+}
+
 function removeContactFromList(listId,recipientId){
     let header={"Content-Type": "application/json"}
     let body=JSON.stringify({recipient_id:""+recipientId+"",list_id:parseInt(listId)})
@@ -42,8 +61,9 @@ function removeContactFromList(listId,recipientId){
             popup.classList.remove('hide')
             setTimeout(()=>{popup.classList.add('hide')},1000)
             setTimeout(()=>{
-                location.reload();
-            },1500)
+                load()
+                location.reload(true);                
+            },2500)
         }
     })
      console.log(body)
@@ -58,16 +78,17 @@ function addRecipientToList(listId,recipientId,listName){
             popup.innerHTML=`Added to <span class="text-dark">${listName}</span>`
             popup.classList.remove('hide')
             setTimeout(()=>{popup.classList.add('hide'); },1000)
-            setTimeout(()=>{
-                location.reload();
-            },1500)
+            setTimeout(()=>{               
+                load()
+                location.reload(true);
+            },3500)
             
         }else{
             popup.innerHTML=`<span class="text-danger">NOT ADDED TRY AGAIN<span>`
             popup.classList.remove('hide')
             setTimeout(()=>{popup.classList.add('hide')},1000)
             setTimeout(()=>{
-                location.reload();
+                location.reload(true);
             },2500)
         }        
 
@@ -78,7 +99,7 @@ function addRecipientToList(listId,recipientId,listName){
 
 function viewRecipient(recipientId){
     let result;
-    let header={"Content-Type": "application/json",id:""+recipientId+""}
+    let header={"Content-Type": "application/json",id:`${recipientId}`}
     document.getElementsByClassName('dropdown')[0].classList.remove('hide')
     editFormBtn.classList.remove('hide')
     makeRequest('get','https://young-bastion-69451.herokuapp.com/recipient',header)
@@ -86,30 +107,37 @@ function viewRecipient(recipientId){
         recipientEmail.value=result.email
         recipientFName.value=result.first_name
         recipientLName.value=result.last_name 
-        editFormBtn.addEventListener('click',function () {
+        editFormBtn.addEventListener('click',function (e) {
+            e.preventDefault();
             submitFormBtn.classList.remove('hide')
            let inputs= recipientForm.getElementsByTagName('input')
-            for(let i=0;i<inputs.length;i++){inputs[i].disabled=false;}
+            for(let i=0;i<inputs.length;i++){
+                if(inputs[i].name!="email"){ inputs[i].disabled=false;}
+               
+            }
         })   
     })
 
     // submiting edited form
-    submitFormBtn.addEventListener('click',()=>{
+    submitFormBtn.addEventListener('click',(e)=>{
+        e.preventDefault();
         let body=  {
             email: ""+recipientEmail.value+"",
             first_name: ""+recipientFName.value+"",
             last_name: ""+recipientLName.value+"",
         }
-        console.log(JSON.stringify(body))
         // make request to send updated data to sendgrid
-        makeRequest('put','https://young-bastion-69451.herokuapp.com/update-recipient',header,JSON.stringify(body))
+        makeRequest('patch','https://young-bastion-69451.herokuapp.com/update-recipient',header,JSON.stringify(body))
         .then(response=>{result=response
-            if(response.status===200&&response.data==='CREATED'){
+            console.log(response.body)
+
+            if(response.status===201&&response.data==='CREATED'){
                 popup.innerHTML="Contact Updated"
                 popup.classList.remove('hide')
-                setTimeout(()=>{popup.classList.add('hide')},1000)
+                setTimeout(()=>{popup.classList.add('hide'); },1000)
                 setTimeout(()=>{
-                    location.reload();
+                    location.reload(true);
+                    load()
                 },1500)
             }
       
@@ -139,7 +167,7 @@ function viewRecipientInList(listId,name){
         if(response.status===200){
             listName.innerHTML=name;
             let li=result.recipients.map(recipient => {
-             return `<li><span onclick="viewRecipient('${recipient.id}')"><a href="#"> ${recipient.email}</a> </span> <span onclick="removeContactFromList('${listId}','${recipient.id}')" class="text-danger float-right"><i class="fas fa-minus-circle text-danger "></i></span></li>`;
+             return `<li><span onclick="viewRecipient('${recipient.id}')"><a href="#"> ${recipient.email}</a> </span> <span onclick="removeContactFromList('${listId}','${recipient.id}')" class="text-danger float-right"><i class="fas fa-minus-circle text-danger "></i></span></li><hr>`;
             });
             listsOfRecipients.innerHTML=li.join('');
             // no recipients added yet
@@ -159,31 +187,27 @@ function load(){
      results=(JSON.parse(response.data))
      console.log(results)
     let li=results.recipients.map(recipient=> {
-        return `<li onclick="viewRecipient('${recipient.id}')"><a href="#"> ${recipient.email}  <span>${recipient.first_name}</span><span>${recipient.last_name}</span></a></li>`;
+        return `<li ><span onclick="viewRecipient('${recipient.id}')"><a href="#"> ${recipient.email} </a></span><span>${recipient.first_name}&nbsp;&nbsp;${recipient.last_name}</span><span onclick="deleteRecipient('${recipient.id}')" class="text-danger float-right"><i class="fas fa-trash"></i></span></li><hr>`;
      });
     allRecipients.innerHTML =`<ul  id="recipientsUl"> ${li.join('')} </ul>`;
-  
+     totalContacts.innerHTML="-"+results.recipient_count+""
+            // FETCH ALL CONTACT LIST
+    makeRequest('get','https://young-bastion-69451.herokuapp.com/lists')
+    .then(response=>{
+            let results;
+            results=(JSON.parse(response.data))
+            console.log(results)
+            let li=results.lists.map(list=> {
+                return `<li class="row"><div onclick="viewRecipientInList('${list.id}','${list.name}')" class="col-6"><a href="#">${list.name}</a></div> <div class="col-4">${list.recipient_count}</div></li><hr>`;
+            });
+            allList.innerHTML =`<ul  id="recipientsUl"> ${li.join('')} </ul>`;
+
+        })
+
     })
 
-    // FETCH ALL CONTACT LIST
-makeRequest('get','https://young-bastion-69451.herokuapp.com/lists')
-.then(response=>{
-        let results;
-         results=(JSON.parse(response.data))
-         console.log(results)
-        let li=results.lists.map(list=> {
-            return `<li class="row"><div onclick="viewRecipientInList('${list.id}','${list.name}')" class="col-6"><a href="#">${list.name}</a></div> <div class="col-4">${list.recipient_count}</div></li>`;
-         });
-        allList.innerHTML =`<ul  id="recipientsUl"> ${li.join('')} </ul>`;
-       
-})
+
 
 }
-
-setInterval(()=>{
-    if(newFetch){
-        load()
-    }
-},1000)
 
 document.addEventListener("DOMContentLoaded",load())

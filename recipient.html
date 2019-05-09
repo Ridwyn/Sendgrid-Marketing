@@ -4,10 +4,68 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Recipients Details</title>
+    <meta http-equiv="Cache-control" content="no-cache">
+    <meta http-equiv="Expires" content="-1">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
+    <link rel="stylesheet" href="style.css">
+    <title>Sendgrid(contacts)CRUD</title>
 </head>
-<body>
-    <div>hel;o</div>
-    
+<body >
+<div class="container" id=recipient-page>
+    <div id="popup" class="hide"></div>
+    <header class="row bg-secondary" id="nav">
+            <div class="col-7 text-light"><a href="/"><h1 class="text-white">SENDGRID COMPAIGNS</h1></a></div>
+            <div class="col-5 align-self-center">
+                    <a href="#" class="btn btn-primary">+New List</a>
+                    <a href="/recipient.html" class="btn btn-primary">+New Recipient</a>
+                    <a href="/compaign.html" class="btn btn-primary">+New Compaign</a>
+            </div>
+            
+        </header>
+        <div class="text-center"><h2>Create New Recipient/Contact</h2></div>
+
+        <section class="row">  
+            <div class="col-6">  
+                <h3 class="text-center">Enter New Contact Details</h3>         
+                <form id="newRecipientForm">
+                    <div class="form-group">
+                        <label for="recipientEmal">Email address</label>
+                        <input type="email" class="form-control" id="recipientEmal" name="email" aria-describedby="emailHelp" placeholder="Enter email" >
+                    </div>
+                    <div class="form-group">
+                        <label for="recipientFName">Firstname</label>
+                        <input type="text" class="form-control" id="recipientFName" name="first_name" placeholder="Firstname" >
+                    </div>
+                    <div class="form-group">
+                        <label for="recipientLName">Lastname</label>
+                        <input type="text" class="form-control" id="recipientLName" name="last_name" placeholder="Lastname" >
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleFormControlSelect1">Select A list to Add:</label>
+                        <select class="form-control w-100" id="allLists" name="list_id">
+                             
+                        </select>
+                    </div>
+                    <button id="editForm" class="btn btn-primary mb-2 mx-4 px-4 float-left mt-2" >Edit</button>
+                    <button type="submit" id="submitForm" class="btn btn-success mb-2 mx-4 px-4 float-right mt-2">Add</button>
+                </form>
+                <hr>
+                <div class="pt-4 text-center">
+                       
+                </div>
+            </div>
+            <div class="col-6">
+                <h3 class="text-center">All Contacts <span id="totalContacts"></span></h3>
+                <ul class="all-recipients" id="allRecipients"></ul>
+            </div>  
+        </section>
+
+</div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous" ></script>  
+    <script src="	https://unpkg.com/popper.js"></script>  
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" ></script>
+    <script src="./js/recipient.js"></script>
 </body>
 </html>

@@ -26,14 +26,28 @@ ul {
     font-size: 2rem;
 }
 
-.dashboard-2 #listsOfRecipients{
+/* .dashboard-2 #listsOfRecipients{
     max-width: 350px;
 }
+#dashboard .all-recipients{
+    max-width: 400px;
+} */
 
-.dashboard-2 #listsOfRecipients i{
+.all-recipients{
+    overflow-y: scroll;
+    height: 400px;
+    padding: 0 1rem;
+}
+
+.dashboard-2 #listsOfRecipients i,.fa-trash{
     cursor: pointer;
 } 
 .dashboard-2 #listsOfRecipients i:hover::after {
     content: 'Remove'
+}
+
+
+.fa-trash:hover::after {
+    content: 'Delete'
 }
 
