@@ -46,7 +46,8 @@ newRecipientForm.addEventListener('submit', function(e){
         if(response.status===200&&response.data==="CREATED"){
             popup.innerHTML=`${s_form.email} created`
             popup.classList.remove('hide')
-            setTimeout(()=>{popup.classList.add('hide'); },1000)
+            setTimeout(()=>{popup.classList.add('hide'); load() },1000)
+            load()
         }
         })
     })
@@ -77,7 +78,7 @@ function load(){
     makeRequest('get','https://young-bastion-69451.herokuapp.com/lists')
     .then(response=>{
             let results;
-            results=(JSON.parse(response.data))
+            results=response.data
             console.log(results)
             let options=results.lists.map(list=> {
                 return `<option value="${list.id}">${list.name}</option>`
@@ -89,7 +90,7 @@ function load(){
     makeRequest('get','https://young-bastion-69451.herokuapp.com/recipients')
     .then(response=>{
        let results;
-        results=(JSON.parse(response.data))
+        results=response.data
         console.log(results)
        let li=results.recipients.map(recipient=> {
            return `<li ><span onclick="viewRecipient('${recipient.id}')"><a href="#"> ${recipient.email} </a></span><span>${recipient.first_name}&nbsp;&nbsp;${recipient.last_name}</span><span onclick="deleteRecipient('${recipient.id}')" class="text-danger float-right"><i class="fas fa-trash"></i></span></li><hr>`;

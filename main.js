@@ -103,7 +103,7 @@ function viewRecipient(recipientId){
     document.getElementsByClassName('dropdown')[0].classList.remove('hide')
     editFormBtn.classList.remove('hide')
     makeRequest('get','https://young-bastion-69451.herokuapp.com/recipient',header)
-    .then(response=>{result=JSON.parse(response.data)
+    .then(response=>{result=response.data
         recipientEmail.value=result.email
         recipientFName.value=result.first_name
         recipientLName.value=result.last_name 
@@ -149,7 +149,7 @@ function viewRecipient(recipientId){
         makeRequest('get','https://young-bastion-69451.herokuapp.com/lists')
         .then(response=>{
             let results;
-            results=(JSON.parse(response.data))
+            results=response.data
             let a=results.lists.map(list=>{
                 return `<a class="dropdown-item text-info" onclick="addRecipientToList('${list.id}','${recipientId}','${list.name}')" href="#">${list.name}</a>`;
             })
@@ -163,7 +163,7 @@ function viewRecipientInList(listId,name){
     let header={"Content-Type": "application/json",id:""+listId+""}
     let url='https://young-bastion-69451.herokuapp.com/list-recipients';
     makeRequest('get',url,header)
-    .then(response=>{result=JSON.parse(response.data)
+    .then(response=>{result=response.data
         if(response.status===200){
             listName.innerHTML=name;
             let li=result.recipients.map(recipient => {
@@ -184,7 +184,7 @@ function load(){
  makeRequest('get','https://young-bastion-69451.herokuapp.com/recipients')
  .then(response=>{
     let results;
-     results=(JSON.parse(response.data))
+     results=response.data
      console.log(results)
     let li=results.recipients.map(recipient=> {
         return `<li ><span onclick="viewRecipient('${recipient.id}')"><a href="#"> ${recipient.email} </a></span><span>${recipient.first_name}&nbsp;&nbsp;${recipient.last_name}</span><span onclick="deleteRecipient('${recipient.id}')" class="text-danger float-right"><i class="fas fa-trash"></i></span></li><hr>`;
@@ -195,7 +195,7 @@ function load(){
     makeRequest('get','https://young-bastion-69451.herokuapp.com/lists')
     .then(response=>{
             let results;
-            results=(JSON.parse(response.data))
+            results=response.data
             console.log(results)
             let li=results.lists.map(list=> {
                 return `<li class="row"><div onclick="viewRecipientInList('${list.id}','${list.name}')" class="col-6"><a href="#">${list.name}</a></div> <div class="col-4">${list.recipient_count}</div></li><hr>`;
