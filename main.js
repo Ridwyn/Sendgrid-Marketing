@@ -34,7 +34,7 @@ async function makeRequest(method,url,headers,body) {
 function removeContactFromList(listId,recipientId){
     let header={"Content-Type": "application/json"}
     let body=JSON.stringify({recipient_id:""+recipientId+"",list_id:parseInt(listId)})
-    makeRequest('delete','http://localhost:3000/remove-from-list',header,body)
+    makeRequest('delete','https://young-bastion-69451.herokuapp.com/remove-from-list',header,body)
     .then(response=>{
         console.log(response)
         if(response.status===200){
@@ -42,7 +42,7 @@ function removeContactFromList(listId,recipientId){
             popup.classList.remove('hide')
             setTimeout(()=>{popup.classList.add('hide')},1000)
             setTimeout(()=>{
-                // location.reload();
+                location.reload();
             },1500)
         }
     })
@@ -52,14 +52,14 @@ function removeContactFromList(listId,recipientId){
 function addRecipientToList(listId,recipientId,listName){
     let header={ "Content-Type": "application/json",id:""+listId+""}
     let body=JSON.stringify({id:""+recipientId+""})
-    makeRequest('post','http://localhost:3000/add-to-list',header,body)
+    makeRequest('post','https://young-bastion-69451.herokuapp.com/add-to-list',header,body)
     .then(response=>{console.log(response)
         if(response.status===200&&response.data==='CREATED'){
             popup.innerHTML=`Added to <span class="text-dark">${listName}</span>`
             popup.classList.remove('hide')
             setTimeout(()=>{popup.classList.add('hide'); },1000)
             setTimeout(()=>{
-                // location.reload();
+                location.reload();
             },1500)
             
         }else{
@@ -67,7 +67,7 @@ function addRecipientToList(listId,recipientId,listName){
             popup.classList.remove('hide')
             setTimeout(()=>{popup.classList.add('hide')},1000)
             setTimeout(()=>{
-                // location.reload();
+                location.reload();
             },2500)
         }        
 
@@ -109,7 +109,7 @@ function viewRecipient(recipientId){
                 popup.classList.remove('hide')
                 setTimeout(()=>{popup.classList.add('hide')},1000)
                 setTimeout(()=>{
-                    // location.reload();
+                    location.reload();
                 },1500)
             }
       
@@ -133,7 +133,7 @@ function viewRecipient(recipientId){
 function viewRecipientInList(listId,name){
     let result;
     let header={"Content-Type": "application/json",id:""+listId+""}
-    let url='http://localhost:3000/list-recipients';
+    let url='https://young-bastion-69451.herokuapp.com/list-recipients';
     makeRequest('get',url,header)
     .then(response=>{result=JSON.parse(response.data)
         if(response.status===200){
