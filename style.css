@@ -17,11 +17,23 @@ ul {
 
 #popup{
     position: absolute;
-    bottom:15%;
-    right:10%;
+    top:45%;
+    left: 30vw;
     z-index:5;
     background-color: rgba(46, 204, 113, 1);
     color: rgb(255,255,255);
     padding: 3rem;
     font-size: 2rem;
 }
+
+.dashboard-2 #listsOfRecipients{
+    max-width: 350px;
+}
+
+.dashboard-2 #listsOfRecipients i{
+    cursor: pointer;
+} 
+.dashboard-2 #listsOfRecipients i:hover::after {
+    content: 'Remove'
+}
+

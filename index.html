@@ -5,12 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
     <link rel="stylesheet" href="style.css">
     <title>Sendgrid(contacts)CRUD</title>
 </head>
 <body >
 <div class="container">
-    <div id="popup" class="hide">Saved</div>
+    <div id="popup" class="hide"></div>
     <header class="row bg-secondary" id="nav">
         <div class="col-7 text-light"><h1>SENDGRID COMAPINGS</h1></div>
         <div class="col-5 align-self-center">
@@ -35,25 +36,36 @@
  
     </section>
 
-    <section class="row pt-4" id="dashboard2">
+    <section class="row pt-4 dashboard-2" id="dashboard2">
         <div class="col-6" >
-            <h2 id="lists">Contact belonging to <span></span></h2> 
-            <ul></ul>
+            <h2 >Contact belonging to <span id="listName" class="text-secondary"></span></h2> 
+            <ul id="listsOfRecipients"></ul>
         </div>
         <div class="col-6 all-recipients" >
-            <h2>Recipient Detail</h2>
-            <form id="form">
+            <div class="row">
+                <div class="col-7"><h2>Recipient Detail</h2></div>
+                <div class="col-5"><div class="dropdown hide">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                          Add contact to list
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" id="dropdownList">
+                          
+                        </div>
+                      </div></div>
+            </div>
+            
+            <form id="recipientForm">
                 <div class="form-group">
                     <label for="recipientEmal">Email address</label>
-                    <input type="email" class="form-control" id="recipientEmal" aria-describedby="emailHelp" placeholder="Enter email">
+                    <input type="email" class="form-control" id="recipientEmal" aria-describedby="emailHelp" placeholder="Enter email" disabled>
                 </div>
                 <div class="form-group">
                     <label for="recipientFName">Firstname</label>
-                    <input type="text" class="form-control" id="recipientFName" placeholder="Firstname">
+                    <input type="text" class="form-control" id="recipientFName" placeholder="Firstname" disabled>
                 </div>
                 <div class="form-group">
                         <label for="recipientLName">Lastname</label>
-                        <input type="text" class="form-control" id="recipientLName" placeholder="Lastname">
+                        <input type="text" class="form-control" id="recipientLName" placeholder="Lastname" disabled>
                 </div>
                 <button id="editForm" class="btn btn-primary mb-2 mx-4 px-4 float-left hide">Edit</button>
                 <button type="submit" id="submitForm"class="btn btn-success mb-2 mx-4 px-4 float-right hide ">Save</button>
@@ -62,6 +74,9 @@
     </section>
 </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous" ></script>  
+    <script src="	https://unpkg.com/popper.js"></script>  
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" ></script>
     <script src="main.js"></script>
 </body>
 </html>
