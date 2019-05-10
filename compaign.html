@@ -18,13 +18,58 @@
             <div class="col-7 text-light"><a href="/"><h1  class="text-white">SENDGRID COMPAIGNS</h1></a></div>
             <div class="col-5 align-self-center">
                     <a href="#" class="btn btn-primary">+New List</a>
-                    <a href="recipient.html" class="btn btn-primary">+New Recipient</a>
-                    <a href="compaign.html" class="btn btn-primary">+New Compaign</a>
+                    <a href="/recipient.html" class="btn btn-primary">+New Recipient</a>
+                    <a href="/compaign.html" class="btn btn-primary">+Marketing Compaigns</a>
             </div>
             
     </header>
-    <div class="text-center"><h2>Create New Compaign</h2></div>
+    <section class="row">
+        <div class="col-6">
+            <h2 class="text-center">Create a New Compaign</h2>
+            <form id="newCompaignForm">
+                    <div class="form-group">
+                        <label for="compaignTitle">Title*</label>
+                        <input type="text" class="form-control" id="compaignTitle" name="title" aria-describedby="emailHelp" placeholder="March Newsletter" >
+                    </div>
+                    <div class="form-group">
+                        <label for="compaignSubject">Subject*</label>
+                        <input type="text" class="form-control" id="compaignSubject" name="subject" placeholder="New Products for Summer" >
+                    </div>
+                    <div class="form-group">
+                        <label for="compaignSender">Sender ID*</label>
+                        <input type="text" class="form-control" id="compaignSender" name="sender_id" placeholder="Ridwyn" value="445951" readonly >
+                    </div>
+                    <div class="form-group">
+                            <label for="compaignCategories">Categories</label>
+                            <input type="text" class="form-control" id="compaignCategories" name="categories" placeholder="Summer Line, Spring Line, Autumn Line etc" >
+                    </div>
+                    <div class="form-group">
+                        <label for="compaignMessage">Email/Message*/label>
+                        <textarea rows = "5" cols = "50" name = "emailBody" id="compaignMessage" placeholder="Lorem ipsum">              
+                        </textarea>
+                    </div>               
+                    <div class="form-group">
+                        <label for="exampleFormControlSelect1">Select List for this Compaign*</label>
+                        <label for="" id="compaignList"></label>
+                        <select class="form-control w-100" id="allLists" name="list_ids">
+                             
+                        </select>
+                    </div>
+                    <!-- <button id="editForm" class="btn btn-primary mb-2 mx-4 px-4 float-left mt-2" >Edit</button> -->
+                    <button type="submit" id="submitForm" class="btn btn-success mb-2 mx-4 px-4 float-right mt-2">Create</button>
+                </form>
+        </div>
+        <div class="col-6">
+            <h2 class="text-center">All Compaigns<span id="totalCompaigns"></span></h2>
+            <div class="row pb-1"><span class="col-3">Title</span><span class="col-3">Subject</span><span class="col-3">Status</span></div>
+            <hr>
+            <ul id="allCompaigns"></ul>
+        </div>
 
+    </section>
+
+    
+    
 
 </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.min.js"></script>

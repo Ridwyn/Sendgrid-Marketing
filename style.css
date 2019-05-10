@@ -38,6 +38,11 @@ ul {
     height: 400px;
     padding: 0 1rem;
 }
+#allCompaigns{
+    overflow-y: scroll;
+    overflow-x: hidden;
+    height: 450px;
+}
 
 .dashboard-2 #listsOfRecipients i,.fa-trash{
     cursor: pointer;

@@ -13,7 +13,8 @@ let editFormBtn=document.getElementById('editForm')
 let recipientForm=document.getElementById('recipientEditForm')
 let dropdownList=document.getElementById('dropdownList');
 let totalContacts=document.getElementById('totalContacts')
-let newFetch=false;
+let lists=[];
+let recipients=[]
 
 
 
@@ -60,10 +61,17 @@ function removeContactFromList(listId,recipientId){
             popup.innerHTML=`Removed Successfully`
             popup.classList.remove('hide')
             setTimeout(()=>{popup.classList.add('hide')},1000)
+            var matchedList= lists.filter(function(list) {
+                return list.id == listId;
+            });
+            let prvCnt=matchedList[0]
+            console.log(prvCnt)
             setTimeout(()=>{
                 load()
-                location.reload(true);                
-            },2500)
+                let list=lists
+                console.log(list)
+                // location.reload(true);                
+            },3500)
         }
     })
      console.log(body)
@@ -80,7 +88,7 @@ function addRecipientToList(listId,recipientId,listName){
             setTimeout(()=>{popup.classList.add('hide'); },1000)
             setTimeout(()=>{               
                 load()
-                location.reload(true);
+                // location.reload(true);
             },3500)
             
         }else{
@@ -136,9 +144,8 @@ function viewRecipient(recipientId){
                 popup.classList.remove('hide')
                 setTimeout(()=>{popup.classList.add('hide'); },1000)
                 setTimeout(()=>{
-                    location.reload(true);
                     load()
-                },1500)
+                },2500)
             }
       
         })
@@ -191,7 +198,12 @@ function load(){
      });
     allRecipients.innerHTML =`<ul  id="recipientsUl"> ${li.join('')} </ul>`;
      totalContacts.innerHTML="-"+results.recipient_count+""
-            // FETCH ALL CONTACT LIST
+     results.recipients.forEach(recipient => {
+        recipients.push({"id":recipient.id,"name":recipient.email})
+        // console.log(recipients)
+    });
+    })
+     // FETCH ALL CONTACT LIST
     makeRequest('get','https://young-bastion-69451.herokuapp.com/lists')
     .then(response=>{
             let results;
@@ -201,10 +213,12 @@ function load(){
                 return `<li class="row"><div onclick="viewRecipientInList('${list.id}','${list.name}')" class="col-6"><a href="#">${list.name}</a></div> <div class="col-4">${list.recipient_count}</div></li><hr>`;
             });
             allList.innerHTML =`<ul  id="recipientsUl"> ${li.join('')} </ul>`;
-
-        })
-
+            results.lists.forEach(list => {
+                lists.push({"id":list.id,"name":list.name,"recipient_count":list.recipient_count})
+                // console.log(lists)
+            });
     })
+
 
 
 
