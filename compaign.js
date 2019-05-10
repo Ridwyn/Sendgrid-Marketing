@@ -63,7 +63,10 @@ function deleteCompaign(compaign_id){
         console.log(response)
         if(response.status===200 && response.data===""){
             popup.innerHTML=`Deleted`
-            popup.classList.remove('hide')  
+            popup.classList.remove('hide') 
+            popup.classList.remove('hide')
+            setTimeout(()=>{popup.classList.add('hide'); },1000)
+            setTimeout(()=>{load()},4000) 
         }else{
             console.log(response.errors)
         }
@@ -79,7 +82,7 @@ function sendCompaign(compaign_id){
         popup.innerHTML=`Compaign Scheduled to be sent`
         popup.classList.remove('hide')
         setTimeout(()=>{popup.classList.add('hide'); },1000)
-        setTimeout(()=>{load()},2000)
+        setTimeout(()=>{load()},4000)
     })
 }
 
