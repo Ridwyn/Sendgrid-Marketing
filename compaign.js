@@ -50,6 +50,9 @@ newCompaignForm.addEventListener('submit', function(e){
     makeRequest('post','https://young-bastion-69451.herokuapp.com/create-compaign',{"Content-Type": "application/json"},data)
     .then(response=>{
         console.log(response)
+        popup.innerHTML=`Compaign <span class="text-dark">${s_form.title}</span>created`
+        popup.classList.remove('hide')
+        setTimeout(()=>{popup.classList.add('hide'); },1000)
         setTimeout(()=>{load()},2000)
     })
 })
@@ -66,7 +69,7 @@ function deleteCompaign(compaign_id){
             popup.classList.remove('hide') 
             popup.classList.remove('hide')
             setTimeout(()=>{popup.classList.add('hide'); },1000)
-            setTimeout(()=>{load()},4000) 
+            setTimeout(()=>{load()},2500) 
         }else{
             console.log(response.errors)
         }
