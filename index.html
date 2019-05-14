@@ -16,16 +16,15 @@
     <div id="popup" class="hide"></div>
     <header class="row bg-secondary" id="nav">
             <div class="col-7 text-light"><a href="/"><h1  class="text-white">SENDGRID COMPAIGNS</h1></a></div>
-            <div class="col-5 align-self-center">
-                    <a href="#" class="btn btn-primary">+New List</a>
+            <div class="col-5 align-self-center">  
+                    <a href="/" class="btn btn-primary">Home</a>                
                     <a href="/recipient.html" class="btn btn-primary">+New Recipient</a>
                     <a href="/compaign.html" class="btn btn-primary">+New Compaign</a>
             </div>
             
         </header>
 
-
-    <section class="row pt-4" id="dashboard">
+    <section class="row pt-4" id="dashboard">            
         <div class="col-6" >
             <h2>All Recipients/Contacts <span id="totalContacts"></span></h2>
             <ul class=" all-recipients" id="recipients"></ul>
@@ -65,16 +64,32 @@
 
     <section class="row pt-4 dashboard-2" id="dashboard2">
         <div class="col-6" >
-            <h2 id="lists">List</h2> 
-            <div class="row"><div class="col-6">Name</div><div class="col-6">Recipient-Count</div></div>
+            <h2 id="lists">List   <a href="#listForm" class="btn btn-primary float-right" id="newListBtn" >+New List</a></h2> 
+            <div class="row"><div class="col-3">Name</div>
+            <div class="col-3">Recipient-Count</div>
+            <div class="col-3">Edit</div>
+            <div class="col-3">Delete</div></div>
+            <hr>
             <ul id="contactLists"></ul>
         </div>
         <div class="col-6" >
             <h2 >Contact belonging to <span id="listName" class="text-secondary"></span></h2> 
             <ul id="listsOfRecipients"></ul>
-        </div>
-      
+        </div>      
     </section>
+    
+    <section class="text-center" class="add-list" id="add-list">
+    <form class="col-6 mx-auto clearfix hide" id="listForm">
+            <h2>Add a List</h2>
+            <div class="form-group">
+                <label for="listName">Name</label>
+                <input type="text" class="form-control" id="listName" name="name" aria-describedby="name-list" placeholder="Enter Name for List" >
+            </div>
+            <button id="saveEditBtn" class="btn btn-primary mb-2 mx-4 px-4 float-left">Save Edit</button>
+            <button type="submit" id="submitList"class="btn btn-success mb-2 mx-4 px-4 float-right">Create</button>
+    </form>
+</section>
+
 </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous" ></script>  

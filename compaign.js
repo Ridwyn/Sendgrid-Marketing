@@ -144,7 +144,6 @@ function load(){
         allCompaigns.innerHTML =li.join('')
         totalCompaigns.innerHTML="-"+results.length+""   
        })
-   
 
 }
 

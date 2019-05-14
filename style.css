@@ -50,6 +50,13 @@ ul {
 .dashboard-2 #listsOfRecipients i:hover::after {
     content: 'Remove'
 }
+.fa-edit:hover{
+cursor: pointer;
+}
+
+.fa-edit:hover::after {
+    content: 'edit'
+}
 
 
 .fa-trash:hover::after {

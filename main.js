@@ -13,10 +13,14 @@ let editFormBtn=document.getElementById('editForm')
 let recipientForm=document.getElementById('recipientEditForm')
 let dropdownList=document.getElementById('dropdownList');
 let totalContacts=document.getElementById('totalContacts')
+// List form
+let listForm=document.getElementById('listForm');
+let newListBtn=document.getElementById('newListBtn')
+let saveEditBtn= document.getElementById('saveEditBtn')
+newListBtn.addEventListener('click',()=>{listForm.classList.remove('hide')})
+
 let lists=[];
 let recipients=[]
-
-
 
 async function makeRequest(method,url,headers,body) {
     try {
@@ -31,6 +35,81 @@ async function makeRequest(method,url,headers,body) {
         console.error(error);
     }
     
+}
+// serializer
+function formSerialize(formElement) {
+    const values = {};
+    const inputs = formElement.elements;
+
+    for (let i = 0; i < inputs.length; i++) {
+        if (inputs[i].type!="submit"){ 
+            values[inputs[i].name] = inputs[i].value;
+        }    
+    }
+    return values;    
+}
+
+listForm.addEventListener('submit',(e)=>{
+    e.preventDefault();
+    let s_form=formSerialize(listForm)
+    createList(JSON.stringify(s_form))
+})
+
+function deleteList(list_id){
+let header={"list_id":list_id}
+makeRequest('delete','https://young-bastion-69451.herokuapp.com/delete-list',header)
+.then((response)=>{console.log(response)
+    if(response.status===200 &&  response.statusText==="OK"){
+        popup.innerHTML=` Deleted `
+        popup.classList.remove('hide')
+        load()
+        setTimeout(()=>{popup.classList.add('hide'); },1000)
+        setTimeout(()=>{  load()},2000)
+    }else{console.log(response)}    
+})
+}
+
+
+function editList(list_id){
+    listForm.classList.remove('hide')
+    var matchedList= lists.filter(function(list) {
+        return list.id ==list_id;
+    });
+    listForm.getElementsByTagName('input')[0].value=matchedList[0].name
+    saveEditBtn.addEventListener('click', (e)=>{
+        e.preventDefault();
+        let header={"Content-Type": "application/json","list_id":list_id}
+        let body=JSON.stringify(formSerialize(listForm))
+        makeRequest('patch','https://young-bastion-69451.herokuapp.com/update-list',header,body)
+        .then((response)=>{console.log(response)
+            if(response.status===200 &&  response.statusText==="OK"){
+                popup.innerHTML=`${JSON.parse(body).name} Updated `
+                popup.classList.remove('hide')
+                load()
+                setTimeout(()=>{popup.classList.add('hide'); },1000)
+                setTimeout(()=>{  load()},2000)
+            }else{
+                console.log(reponse)
+            }
+        })
+
+    })
+}
+
+function createList(body){
+    let header={"Content-Type": "application/json"}
+    console.log(header,body)
+    makeRequest('post','https://young-bastion-69451.herokuapp.com/create-list',header,body)
+    .then(response=>{
+        if(response.data==='CREATED'&&response.status===200){
+            popup.innerHTML=`${JSON.parse(body).name} created `
+            popup.classList.remove('hide')
+            load()
+            setTimeout(()=>{popup.classList.add('hide'); },1000)
+            setTimeout(()=>{  load()},2000)
+        }
+        console.log(response)
+    })
 }
 
 function deleteRecipient(recipient_id){
@@ -210,7 +289,12 @@ function load(){
             results=response.data
             console.log(results)
             let li=results.lists.map(list=> {
-                return `<li class="row"><div onclick="viewRecipientInList('${list.id}','${list.name}')" class="col-6"><a href="#">${list.name}</a></div> <div class="col-4">${list.recipient_count}</div></li><hr>`;
+                return `<li class="row">
+                <div onclick="viewRecipientInList('${list.id}','${list.name}')" class="col-3"><a href="#">${list.name}</a></div> 
+                <div class="col-3">${list.recipient_count}</div>
+                <div onclick=editList('${list.id}') class="text-primary col-3"><i class="fas fa-edit"></i></div>
+                <div onclick=deleteList('${list.id}') class="text-danger col-3" ><i class="fas fa-trash"></i></div>
+                </li><hr>`;
             });
             allList.innerHTML =`<ul  id="recipientsUl"> ${li.join('')} </ul>`;
             results.lists.forEach(list => {
