@@ -8,6 +8,7 @@ let compaignCategories=document.getElementById('compaignCategories')
 let compaignMessage=document.getElementById('compaignMessage')
 let compaignList=document.getElementById('compaignList')
 
+
 let lists=[]
 
 async function makeRequest(method,url,headers,body) {
@@ -38,6 +39,39 @@ function formSerialize(formElement) {
     return values;
     
 }
+
+//SCHEDULING DATE AND TIMEWITH SET DATEBTN
+allCompaigns.addEventListener('click',(e)=>{
+    if(e.target.id=="setDateBtn"){
+        e.preventDefault()
+        let dateform =e.target.parentNode
+        let compaign_id=dateform.getAttribute('compaign-id')
+        let dateInput=dateform.getElementsByTagName('input')[0]
+        let unixFormat= Date.parse(dateInput.value)
+        let header={"Content-Type": "application/json","compaign_id":parseInt(compaign_id)}
+        let body={"send_at":parseInt(unixFormat)}
+        
+        if(Number.isInteger(unixFormat)){  
+            console.log(unixFormat)
+            makeRequest('post','http://localhost:3000/schedule-compaign',header,body)
+                .then((response)=>{
+                console.log(response)
+                if(response.status===201){
+                    popup.innerHTML=`Schedule for ${response} `
+                popup.classList.remove('hide')
+                setTimeout(()=>{popup.classList.add('hide'); },1000)
+                setTimeout(()=>{load()},2000)
+                }else{
+                    alert(response.data.errors[0])
+                }
+            })           
+        }
+        else{
+            alert("insert all field of date dd/mm/yyyy hh/mm")
+        }
+    }
+  
+})
 
 // submitting form
 newCompaignForm.addEventListener('submit', function(e){
@@ -111,6 +145,7 @@ function viewCompaign(compaign_id){
 }
 
 
+
 function load(){
     // Fetch alL created lists
     makeRequest('get','https://young-bastion-69451.herokuapp.com/lists')
@@ -138,11 +173,14 @@ function load(){
            <span class="col-3" onclick="viewCompaign('${compaign.id}')"><a href="#"> ${compaign.title} </a></span>
            <span class="col-3">${compaign.subject}</span>&nbsp&nbsp
            <span class="text-info col-2">${compaign.status}</span>
-           <span class="btn btn-primary col-3" onclick="sendCompaign('${compaign.id}')"> Send Compaign </span>
-           <span onclick="deleteCompaign('${compaign.id}')" class="text-danger float-right col-2"><i class="fas fa-trash"></i></span></li><hr>`;
+           <span class="btn btn-primary col-3" onclick="sendCompaign('${compaign.id}')"> Send Now </span>
+           <span onclick="deleteCompaign('${compaign.id}')" class="text-danger float-right col-2"><i class="fas fa-trash"></i></span>
+           <span><form id="scheduleTime" compaign-id="${compaign.id}"><input type="datetime-local" name="time" required> <button id="setDateBtn">Set Date</button></form></span>
+           </li><hr>`;
         });
         allCompaigns.innerHTML =li.join('')
-        totalCompaigns.innerHTML="-"+results.length+""   
+        totalCompaigns.innerHTML="-"+results.length+"" 
+ 
        })
 
 }
