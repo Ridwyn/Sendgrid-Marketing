@@ -47,28 +47,46 @@ allCompaigns.addEventListener('click',(e)=>{
         let dateform =e.target.parentNode
         let compaign_id=dateform.getAttribute('compaign-id')
         let dateInput=dateform.getElementsByTagName('input')[0]
-        let unixFormat= Date.parse(dateInput.value)
+        let unixFormat=new Date(""+dateInput.value+"").getTime()/1000.0
         let header={"Content-Type": "application/json","compaign_id":parseInt(compaign_id)}
         let body={"send_at":parseInt(unixFormat)}
-        
-        if(Number.isInteger(unixFormat)){  
-            console.log(unixFormat)
-            makeRequest('post','http://localhost:3000/schedule-compaign',header,body)
-                .then((response)=>{
-                console.log(response)
-                if(response.status===201){
-                    popup.innerHTML=`Schedule for ${response} `
-                popup.classList.remove('hide')
-                setTimeout(()=>{popup.classList.add('hide'); },1000)
-                setTimeout(()=>{load()},2000)
-                }else{
-                    alert(response.data.errors[0])
-                }
-            })           
+        let futureDate=false;
+        let sending=false;
+        let currentDate=Math.floor(Date.now()/1000.0)
+        if (unixFormat>currentDate) {
+            futureDate=true
         }
-        else{
+        // console.log(unixFormat)
+        // console.log(Math.floor(Date.now()/1000.0))
+        
+        if(Number.isInteger(unixFormat) ){  
+            console.log(unixFormat)
+            if (futureDate) {
+                sending=true
+                makeRequest('post','http://localhost:3000/api-staging/site/emailMarketing/schedule-compaign',header,body)
+                    .then((response)=>{
+                    console.log(response)
+                    if(response.data.status==="Scheduled"){
+                        popup.innerHTML=`Schedule for ${dateInput.value} `
+                    popup.classList.remove('hide')
+                    setTimeout(()=>{popup.classList.add('hide'); },1000)
+                    setTimeout(()=>{load()},2000)
+                    sending=false;
+                    }else{
+                        alert("could not schedule a sent comapaign")
+                        console.log(response)
+                    }
+                }) 
+            }else{alert('select a future date')}
+        }else{
             alert("insert all field of date dd/mm/yyyy hh/mm")
         }
+        if (sending) {
+            alert('scheduling....')
+        }else(
+            alert('scheduled')
+        )
+        
     }
   
 })
@@ -175,7 +193,7 @@ function load(){
            <span class="text-info col-2">${compaign.status}</span>
            <span class="btn btn-primary col-3" onclick="sendCompaign('${compaign.id}')"> Send Now </span>
            <span onclick="deleteCompaign('${compaign.id}')" class="text-danger float-right col-2"><i class="fas fa-trash"></i></span>
-           <span><form id="scheduleTime" compaign-id="${compaign.id}"><input type="datetime-local" name="time" required> <button id="setDateBtn">Set Date</button></form></span>
+           <span><form id="scheduleTime" compaign-id="${compaign.id}"><input type="datetime-local" name="time" required> <button id="setDateBtn">Schedule</button></form></span>
            </li><hr>`;
         });
         allCompaigns.innerHTML =li.join('')
