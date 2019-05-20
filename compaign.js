@@ -63,7 +63,7 @@ allCompaigns.addEventListener('click',(e)=>{
             console.log(unixFormat)
             if (futureDate) {
                 sending=true
-                makeRequest('post','http://localhost:3000/api-staging/site/emailMarketing/schedule-compaign',header,body)
+                makeRequest('post','https://young-bastion-69451.herokuapp.com/schedule-compaign',header,body)
                     .then((response)=>{
                     console.log(response)
                     if(response.data.status==="Scheduled"){

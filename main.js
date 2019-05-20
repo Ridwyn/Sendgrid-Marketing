@@ -16,6 +16,7 @@ let totalContacts=document.getElementById('totalContacts')
 // List form
 let listForm=document.getElementById('listForm');
 let newListBtn=document.getElementById('newListBtn')
+let submitList=document.getElementById('submitList')
 let saveEditBtn= document.getElementById('saveEditBtn')
 newListBtn.addEventListener('click',()=>{listForm.classList.remove('hide')})
 
